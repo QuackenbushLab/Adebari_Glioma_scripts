@@ -19,24 +19,14 @@
 9.  Run **updatecode.py** to split the normalized and filtered data into LGG_F, LGG_M, GBM_F, and GBM_M.
     -  **split_file_dir:** The path to the directory where you wish to store the split files.
     -  **matrix_dir:** The path to the file containing the matrix of gene expression levels.
-
 10.  Run **runpanda.py** to run PANDA, changing the following:
-
-    -  **localDir:** The local directory where the motif, PPI, and expression data are stored.
-
+     -  **localDir:** The local directory where the motif, PPI, and expression data are stored.
 11.  Run **PercentileMonster.R** to run MONSTER, changing the following:
-
-    -  **localDir:** The local directory where the files are stored.
-
+     -  **localDir:** The local directory where the files are stored.
 12.  Run **diffanalysis.R** to do pathway analysis changing the following:
-
-    -  **localDir:** The local directory where the files are stored.
-    -  **pathwayDBFile:** The pathway file path.
-
+     -  **localDir:** The local directory where the files are stored.
+     -  **pathwayDBFile:** The pathway file path.
 13.  Run **Diffanalysis_Visuals.R** to plot the pathways, changing the following:
-
-    -  **localDir:** The local directory where the files are stored.
-
+     -  **localDir:** The local directory where the files are stored.
 14.  Run **MONSTER_plots.R** changing the following:
- 
-   -  **localDir:** The local directory where the files are stored.
+     -  **localDir:** The local directory where the files are stored.

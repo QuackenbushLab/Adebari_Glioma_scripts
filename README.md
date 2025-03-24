@@ -30,3 +30,4 @@
      -  **localDir:** The local directory where the files are stored.
 14.  Run **MONSTER_plots.R** changing the following:
      -  **localDir:** The local directory where the files are stored.
+15. Install Cytoscape, the Enrichment Map application, and the Auto Annotate application, and load each pathway result into the Enrichment Map.

@@ -41,7 +41,8 @@ ComputeTargeting <- function(network){
   netAdjTfGene <- netAdj[uniqueTFInRows, uniqueGeneInCols]
   sumByGene <- colSums(netAdjTfGene)
   names(sumByGene) <- uniqueGeneInCols
-  return(sumByGene)
+  sumByGeneDF <- data.frame(x = sumByGene)
+  return(sumByGeneDF)
 }
 
 # Compute targeting of each group.
@@ -69,29 +70,54 @@ write.csv(gbmMaleTargeting, paste0(localDir, 'gbmMaleTargeting.csv'))
 
 #taking differences in percentiles
 GBMMaleFemalediff <- gbmMaleTargeting$percentile - gbmFemaleTargeting$percentile
+names(GBMMaleFemalediff) <- rownames(gbmMaleTargeting)
 LGGMaleFemalediff <- lggMaleTargeting$percentile - lggFemaleTargeting$percentile
+names(LGGMaleFemalediff) <- rownames(gbmMaleTargeting)
 GBMFemaleMalediff <- gbmFemaleTargeting$percentile - gbmMaleTargeting$percentile
+names(GBMFemaleMalediff) <- rownames(gbmMaleTargeting)
 LGGFemaleMalediff <- lggFemaleTargeting$percentile - lggMaleTargeting$percentile
+names(LGGFemaleMalediff) <- rownames(gbmMaleTargeting)
 GBMMaleLGGMalediff <- gbmMaleTargeting$percentile - lggMaleTargeting$percentile
+names(GBMMaleLGGMalediff) <- rownames(gbmMaleTargeting)
 GBMFemaleLGGFemale <- gbmFemaleTargeting$percentile - lggFemaleTargeting$percentile
+names(GBMFemaleLGGFemale) <- rownames(gbmMaleTargeting)
 LGGMaleGBMMalediff <- lggMaleTargeting$percentile - gbmMaleTargeting$percentile
+names(LGGMaleGBMMalediff) <- rownames(gbmMaleTargeting)
 LGGFemaleGBMFemalediff <- lggFemaleTargeting$percentile - lggMaleTargeting$percentile
+names(LGGFemaleGBMFemalediff) <- rownames(gbmMaleTargeting)
+# GBMMaleFemalediff <- gbmMaleTargeting$x - gbmFemaleTargeting$x
+# names(GBMMaleFemalediff) <- rownames(gbmMaleTargeting)
+# LGGMaleFemalediff <- lggMaleTargeting$x - lggFemaleTargeting$x
+# names(LGGMaleFemalediff) <- rownames(gbmMaleTargeting)
+# GBMFemaleMalediff <- gbmFemaleTargeting$x - gbmMaleTargeting$x
+# names(GBMFemaleMalediff) <- rownames(gbmMaleTargeting)
+# LGGFemaleMalediff <- lggFemaleTargeting$x - lggMaleTargeting$x
+# names(LGGFemaleMalediff) <- rownames(gbmMaleTargeting)
+# GBMMaleLGGMalediff <- gbmMaleTargeting$x - lggMaleTargeting$x
+# names(GBMMaleLGGMalediff) <- rownames(gbmMaleTargeting)
+# GBMFemaleLGGFemale <- gbmFemaleTargeting$x - lggFemaleTargeting$x
+# names(GBMFemaleLGGFemale) <- rownames(gbmMaleTargeting)
+# LGGMaleGBMMalediff <- lggMaleTargeting$x - gbmMaleTargeting$x
+# names(LGGMaleGBMMalediff) <- rownames(gbmMaleTargeting)
+# LGGFemaleGBMFemalediff <- lggFemaleTargeting$x - lggMaleTargeting$x
+# names(LGGFemaleGBMFemalediff) <- rownames(gbmMaleTargeting)
 
 #Add SYMBOLS.
 library(org.Hs.eg.db)
 ens2symbol <- AnnotationDbi::select(org.Hs.eg.db,
-                                    key=gbmMaleTargeting$X, 
+                                    key=rownames(gbmMaleTargeting), 
                                     columns="SYMBOL",
                                     keytype="ENSEMBL")
 symbols <- ens2symbol[which(!is.na(ens2symbol$SYMBOL)),]
-GBMMaleFemalediffSymbol <- GBMMaleFemalediff[which(gbmMaleTargeting$X %in% symbols$ENSEMBL)]
-LGGMaleFemalediffSymbol <- LGGMaleFemalediff[which(gbmMaleTargeting$X %in% symbols$ENSEMBL)]
-GBMFemaleMalediffSymbol <- GBMFemaleMalediff[which(gbmMaleTargeting$X %in% symbols$ENSEMBL)]
-LGGFemaleMalediffSymbol <- LGGFemaleMalediff[which(gbmMaleTargeting$X %in% symbols$ENSEMBL)]
-GBMMaleLGGMalediffSymbol <- GBMMaleLGGMalediff[which(gbmMaleTargeting$X %in% symbols$ENSEMBL)]
-GBMFemaleLGGFemaleSymbol <- GBMFemaleLGGFemale[which(gbmMaleTargeting$X %in% symbols$ENSEMBL)]
-LGGMaleGBMMalediffSymbol <- LGGMaleGBMMalediff[which(gbmMaleTargeting$X %in% symbols$ENSEMBL)]
-LGGFemaleGBMFemalediffSymbol <- LGGFemaleGBMFemalediff[which(gbmMaleTargeting$X %in% symbols$ENSEMBL)]
+whichInEnsembl <- which(rownames(gbmMaleTargeting) %in% symbols$ENSEMBL)
+GBMMaleFemalediffSymbol <- GBMMaleFemalediff[whichInEnsembl]
+LGGMaleFemalediffSymbol <- LGGMaleFemalediff[whichInEnsembl]
+GBMFemaleMalediffSymbol <- GBMFemaleMalediff[whichInEnsembl]
+LGGFemaleMalediffSymbol <- LGGFemaleMalediff[whichInEnsembl]
+GBMMaleLGGMalediffSymbol <- GBMMaleLGGMalediff[whichInEnsembl]
+GBMFemaleLGGFemaleSymbol <- GBMFemaleLGGFemale[whichInEnsembl]
+LGGMaleGBMMalediffSymbol <- LGGMaleGBMMalediff[whichInEnsembl]
+LGGFemaleGBMFemalediffSymbol <- LGGFemaleGBMFemalediff[whichInEnsembl]
 
 
 mappedSymbols <- unlist(lapply(names(GBMMaleFemalediffSymbol), function(ensembl){
@@ -106,6 +132,32 @@ names(GBMFemaleLGGFemaleSymbol) <- mappedSymbols
 names(LGGMaleGBMMalediffSymbol) <- mappedSymbols
 names(LGGFemaleGBMFemalediffSymbol) <- mappedSymbols
 
+# Remove duplicates.
+symbolCounts <- table(mappedSymbols)
+dupSymbols <- names(symbolCounts)[which(symbolCounts > 1)]
+removeDups <- function(diffData){
+  
+  # Find indices to remove.
+  toRemove <- unlist(lapply(dupSymbols, function(symbol){
+    whichSymbol <- which(mappedSymbols == symbol)
+    absVals <- abs(diffData[whichSymbol])
+    whichToKeep <- which.max(absVals)
+    whichToRemove <- whichSymbol[setdiff(1:length(absVals), whichToKeep)]
+    return(whichToRemove)
+  }))
+  
+  # Update the data set.
+  str(setdiff(1:length(diffData), toRemove))
+  return(diffData[setdiff(1:length(diffData), toRemove)])
+}
+GBMMaleFemalediffSymbolDedup <- removeDups(GBMMaleFemalediffSymbol)
+LGGMaleFemalediffSymbolDedup <- removeDups(LGGMaleFemalediffSymbol)
+GBMFemaleMalediffSymbolDedup <- removeDups(GBMFemaleMalediffSymbol)
+LGGFemaleMalediffSymbolDedup <- removeDups(LGGFemaleMalediffSymbol)
+GBMMaleLGGMalediffSymbolDedup <- removeDups(GBMMaleLGGMalediffSymbol)
+GBMFemaleLGGFemaleSymbolDedup <- removeDups(GBMFemaleLGGFemaleSymbol)
+LGGMaleGBMMalediffSymbolDedup <- removeDups(LGGMaleGBMMalediffSymbol)
+LGGFemaleGBMFemalediffSymbolDedup <- removeDups(LGGFemaleGBMFemalediffSymbol)
 
 # Run the pathway analysis with a "greater" and "less" group.
 pathways = fgsea::gmtPathways(pathwayDBFile)
@@ -114,15 +166,11 @@ RunPathwayAnalysis <- function(networkScores, pathwayFile){
   # Run pathway analysis.
   pathwayResult <- fgsea::fgsea(pathways = pathways, stats = networkScores,
                                 scoreType = "pos")
-  str(pathways)
-  str(networkScores)
-  str(pathwayResult)
   
   # Compile the "leading edge" vector into a list.
   leadingEdge <- unlist(lapply(1:length(pathwayResult$leadingEdge), function(i){
     return(paste(pathwayResult$leadingEdge[i][[1]], collapse = "; "))
   }))
-  str(leadingEdge)
   pathwayResultDf <- data.frame(pathway = pathwayResult$pathway,
                                 pval = pathwayResult$pval,
                                 padj = pathwayResult$padj,
@@ -131,21 +179,47 @@ RunPathwayAnalysis <- function(networkScores, pathwayFile){
                                 normalizedEnrichmentScore = pathwayResult$NES,
                                 remainingGeneCount = pathwayResult$size,
                                 leadingGenesDrivingEnrichment = leadingEdge)
-  str(pathwayResultDf)
+  print(GBMMaleFemalePathwayFile)
   write.csv(pathwayResultDf, pathwayFile)
-
-
 
   # Return result.
   return(pathwayResultDf)
 }
 
 # Run for each comparison.
-GBMMaleFemalePathways <- RunPathwayAnalysis(GBMMaleFemalediffSymbol, GBMMaleFemalePathwayFile)
-LGGMaleFemaledPathways <- RunPathwayAnalysis(LGGMaleFemalediffSymbol, LGGMaleFemalePathwayFile)
-GBMFemaleMalePathways <- RunPathwayAnalysis(GBMFemaleMalediffSymbol, GBMFemaleMalePathwayFile)
-LGGFemaleMalePathways <- RunPathwayAnalysis(LGGFemaleMalediffSymbol, LGGFemaleMalePathwayFile)
-GBMMaleLGGMalePathways <- RunPathwayAnalysis(GBMMaleLGGMalediffSymbol, GBMMaleLGGMalePathwayFile)
-GBMFemaleLGGFemalePathways <- RunPathwayAnalysis(GBMFemaleLGGFemaleSymbol, GBMFemaleLGGFemalePathwayFile)
-LGGMaleGBMMalePathways <- RunPathwayAnalysis(LGGMaleGBMMalediffSymbol, LGGMaleGBMMalePathwayFile)
-LGGFemaleGBMFemalePathways <- RunPathwayAnalysis(LGGFemaleGBMFemalediffSymbol, LGGFemaleGBMFemalePathwayFile)
+GBMMaleFemalePathways <- RunPathwayAnalysis(GBMMaleFemalediffSymbolDedup, GBMMaleFemalePathwayFile)
+LGGMaleFemaledPathways <- RunPathwayAnalysis(LGGMaleFemalediffSymbolDedup, LGGMaleFemalePathwayFile)
+GBMFemaleMalePathways <- RunPathwayAnalysis(GBMFemaleMalediffSymbolDedup, GBMFemaleMalePathwayFile)
+LGGFemaleMalePathways <- RunPathwayAnalysis(LGGFemaleMalediffSymbolDedup, LGGFemaleMalePathwayFile)
+GBMMaleLGGMalePathways <- RunPathwayAnalysis(GBMMaleLGGMalediffSymbolDedup, GBMMaleLGGMalePathwayFile)
+GBMFemaleLGGFemalePathways <- RunPathwayAnalysis(GBMFemaleLGGFemaleSymbolDedup, GBMFemaleLGGFemalePathwayFile)
+LGGMaleGBMMalePathways <- RunPathwayAnalysis(LGGMaleGBMMalediffSymbolDedup, LGGMaleGBMMalePathwayFile)
+LGGFemaleGBMFemalePathways <- RunPathwayAnalysis(LGGFemaleGBMFemalediffSymbolDedup, LGGFemaleGBMFemalePathwayFile)
+
+# Paste together.
+PastePathways <- function(up, down, pathwayFile){
+  # Reformat for Cytoscape.
+  pathwayResultDfCytoscapeUp <- data.frame(id = up$pathway,
+                                         name = up$pathway,
+                                         pval = up$pval,
+                                         fdr = up$padj,
+                                         phenotype = rep("+1", nrow(up)),
+                                         geneList = up$leadingGenesDrivingEnrichment)
+  pathwayResultDfCytoscapeDown <- data.frame(id = down$pathway,
+                                           name = down$pathway,
+                                           pval = down$pval,
+                                           fdr = down$padj,
+                                           phenotype = rep("-1", nrow(down)),
+                                           geneList = down$leadingGenesDrivingEnrichment)
+  pathwayResultDf <- rbind(pathwayResultDfCytoscapeUp, pathwayResultDfCytoscapeDown)
+  write.table(pathwayResultDf, paste0(pathwayFile), quote = FALSE, row.names = FALSE,
+              sep = "\t")
+}
+PastePathways(GBMMaleFemalePathways, GBMFemaleMalePathways,
+              paste0(localDir, "GBMMaleFemale.txt"))
+PastePathways(LGGMaleFemaledPathways, LGGFemaleMalePathways,
+              paste0(localDir, "LGGMaleFemale.txt"))
+PastePathways(GBMMaleLGGMalePathways, LGGMaleGBMMalePathways,
+              paste0(localDir, "GBMLGGMale.txt"))
+PastePathways(GBMFemaleLGGFemalePathways, LGGFemaleGBMFemalePathways,
+              paste0(localDir, "GBMLGGFemale.txt"))

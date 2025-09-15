@@ -26,8 +26,7 @@
 12.  Run **diffanalysis.R** to do pathway analysis changing the following:
      -  **localDir:** The local directory where the files are stored.
      -  **pathwayDBFile:** The pathway file path.
-13.  Run **Diffanalysis_Visuals.R** to plot the pathways, changing the following:
-     -  **localDir:** The local directory where the files are stored.
-14.  Run **MONSTER_plots.R** changing the following:
-     -  **localDir:** The local directory where the files are stored.
-15. Install Cytoscape, the Enrichment Map application, and the Auto Annotate application, and load each pathway result into the Enrichment Map.
+13.  Run **PathwayDifferentialAnalysis.R** to plot the pathways, changing the following:
+     -  **sourceDir:** The local directory where the files are stored.
+14.  Run **RunBLOBFISHAllTFS.R** to run BLOBFISH and plot the results, changing the following:
+     -  **sourceDir:** The local directory where the files are stored.

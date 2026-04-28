@@ -1,7 +1,7 @@
 library(netZooR)
 
 # Transpose the files.
-fileDir <- "../REMBRANDT/"
+fileDir <- NULL
 write.table(read.csv(paste0(fileDir, "femaleGBM_REMBRANDT.csv"), row.names = 1),
             sep = "\t",
             paste0(fileDir, "femaleGBM_REMBRANDT.txt"))

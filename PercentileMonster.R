@@ -2,7 +2,7 @@ library(netZooR)
 library(reshape2)
 
 #Read in PANDA output paths
-localDir
+localDir <- NULL
 LGGFemalePath <- paste0(localDir,'/LGG_Female_Panda_output.txt')
 GBMFemalePath <- paste0(localDir,'/GBM_Female_Panda_output.txt')
 LGGMalePath <- paste0(localDir,'/LGG_Male_Panda_output.txt')

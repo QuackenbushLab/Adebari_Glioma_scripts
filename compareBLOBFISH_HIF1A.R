@@ -1,10 +1,13 @@
 # Read pathway result files.
-sourceDir <- "/Users/tae771/Library/CloudStorage/OneDrive-HarvardUniversity/Documents/postdoc/Tomi/"
-GBMM_GBMF <- read.csv(paste0(sourceDir, "GBMMale_Female_PathwayFile.csv"))
-GBMF_GBMM <- read.csv(paste0(sourceDir, "GBMFemale_Male_PathwayFile.csv"))
+pathwayDir <- NULL
+tcgaDir <- NULL
+rembrandtDir <- NULL
+gmtFilePath <- NULL
+GBMM_GBMF <- read.csv(paste0(pathwayDir, "GBMMale_Female_PathwayFile.csv"))
+GBMF_GBMM <- read.csv(paste0(pathwayDir, "GBMFemale_Male_PathwayFile.csv"))
 
 # Get all genes in the pathways of interest.
-gmtFile = fgsea::gmtPathways(paste0(sourceDir, "c2.cp.v2023.2.Hs.symbols.gmt"))
+gmtFile = fgsea::gmtPathways(gmtFilePath)
 cancerPathways <- c("WP_TYPE_2_PAPILLARY_RENAL_CELL_CARCINOMA", "WP_CLEAR_CELL_RENAL_CELL_CARCINOMA_PATHWAYS")
 getGenesInPathways <- function(pathwayNames, pathwayFile){
   geneStrings <- pathwayFile[which(pathwayFile$pathway %in% pathwayNames), "leadingGenesDrivingEnrichment"]
@@ -15,13 +18,13 @@ getGenesInPathways <- function(pathwayNames, pathwayFile){
 cancerGenes <- getGenesInPathways(cancerPathways, GBMF_GBMM)
 
 #Read BLOBFISH results
-lggFemaleBlobfish <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/LGG_Female_Panda_BLOBFISH_Full.csv"),
+lggFemaleBlobfish <- read.csv(paste0(rembrandtDir, "LGG_Female_Panda_BLOBFISH_Full.csv"),
                               row.names = 1)
-gbmFemaleBlobfish <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/GBM_Female_Panda_BLOBFISH_Full.csv"),
+gbmFemaleBlobfish <- read.csv(paste0(rembrandtDir, "GBM_Female_Panda_BLOBFISH_Full.csv"),
                               row.names = 1)
-lggMaleBlobfish <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/LGG_Male_Panda_BLOBFISH_Full.csv"),
+lggMaleBlobfish <- read.csv(paste0(rembrandtDir, "LGG_Male_Panda_BLOBFISH_Full.csv"),
                             row.names = 1)
-gbmMaleBlobfish <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/GBM_Male_Panda_BLOBFISH_Full.csv"),
+gbmMaleBlobfish <- read.csv(paste0(rembrandtDir, "GBM_Male_Panda_BLOBFISH_Full.csv"),
                             row.names = 1)
 
 # Find the GBM Female and Male specific edges.
@@ -37,13 +40,13 @@ gbmFemaleHIF1A <- gbmFemaleSpecificBlobfish[which(gbmFemaleSpecificBlobfish$gene
 gbmMaleHIF1A <- gbmMaleSpecificBlobfish[which(gbmMaleSpecificBlobfish$gene %in% cancerGenes),]
 
 # Do the same for TCGA.
-lggFemaleBlobfishTCGA <- read.csv(paste0(sourceDir, "LGG_Female_Panda_BLOBFISH_Full.csv"),
+lggFemaleBlobfishTCGA <- read.csv(paste0(tcgaDir, "LGG_Female_Panda_BLOBFISH_Full.csv"),
                               row.names = 1)
-gbmFemaleBlobfishTCGA <- read.csv(paste0(sourceDir, "GBM_Female_Panda_BLOBFISH_Full.csv"),
+gbmFemaleBlobfishTCGA <- read.csv(paste0(tcgaDir, "GBM_Female_Panda_BLOBFISH_Full.csv"),
                               row.names = 1)
-lggMaleBlobfishTCGA <- read.csv(paste0(sourceDir, "LGG_Male_Panda_BLOBFISH_Full.csv"),
+lggMaleBlobfishTCGA <- read.csv(paste0(tcgaDir, "LGG_Male_Panda_BLOBFISH_Full.csv"),
                             row.names = 1)
-gbmMaleBlobfishTCGA <- read.csv(paste0(sourceDir, "GBM_Male_Panda_BLOBFISH_Full.csv"),
+gbmMaleBlobfishTCGA <- read.csv(paste0(tcgaDir, "GBM_Male_Panda_BLOBFISH_Full.csv"),
                             row.names = 1)
 gbmFemaleSpecificBlobfishTCGA <- gbmFemaleBlobfishTCGA[setdiff(rownames(gbmFemaleBlobfishTCGA),
                                                        c(rownames(lggFemaleBlobfishTCGA),

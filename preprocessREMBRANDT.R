@@ -2,8 +2,8 @@ library(AnnotationDbi)
 library(hgu133plus2.db)
 
 # Read in the data.
-sourceDir <- "/Users/tae771/Library/CloudStorage/OneDrive-HarvardUniversity/Documents/postdoc/Tomi/REMBRANDT/"
-pccFile <- "/Users/tae771/Library/CloudStorage/OneDrive-HarvardUniversity/Documents/postdoc/SFARI/gencode.v49.basic.annotation.gtf"
+sourceDir <- NULL
+pccFile <- NULL
 clinical <- read.table(paste0(sourceDir, "GSE108474_REMBRANDT_clinical.data.txt"), sep = "\t",
                        header = TRUE)
 expression <- read.table(paste0(sourceDir, "GSE108474_REMBRANDT_GeneExpression.txt"), 

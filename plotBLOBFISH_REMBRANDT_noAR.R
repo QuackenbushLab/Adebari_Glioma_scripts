@@ -1,12 +1,15 @@
 library(netZooR)
 
 # Read pathway result files.
-sourceDir <- "/Users/tae771/Library/CloudStorage/OneDrive-HarvardUniversity/Documents/postdoc/Tomi/"
+pathwayDir <- NULL
+gmtFilePath <- NULL
+rembrandtDir <- NULL
+rembrandtResultDir <- NULL
 GBMM_GBMF <- read.csv(paste0(sourceDir, "GBMMale_Female_PathwayFile.csv"))
 GBMF_GBMM <- read.csv(paste0(sourceDir, "GBMFemale_Male_PathwayFile.csv"))
 
 # Get all genes in the pathways of interest.
-gmtFile = fgsea::gmtPathways(paste0(sourceDir, "c2.cp.v2023.2.Hs.symbols.gmt"))
+gmtFile = fgsea::gmtPathways(gmtFilePath)
 mrnaPathways <- c("REACTOME_METABOLISM_OF_RNA", "REACTOME_Splicing_SPLICING", "REACTOME_PROCESSING_OF_CAPPED_INTRON_CONTAINING_PRE_Splicing")
 immunePathways <- c("REACTOME_NEUTROPHIL_DEGRANULATION", "REACTOME_INNATE_IMMUNE_SYSTEM",
                     "KEGG_LYSOSOME")
@@ -32,13 +35,13 @@ genesOfInterest <- unique(c(mrnaGenes, arGenes, immuneGenes, carbGenes, ecmGenes
                      hypoxiaGenes))
 
 #Read BLOBFISH results
-lggFemaleBlobfish <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/LGG_Female_Panda_BLOBFISH_Full.csv"),
+lggFemaleBlobfish <- read.csv(paste0(rembrandtDir, "LGG_Female_Panda_BLOBFISH_Full.csv"),
                               row.names = 1)
-gbmFemaleBlobfish <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/GBM_Female_Panda_BLOBFISH_Full.csv"),
+gbmFemaleBlobfish <- read.csv(paste0(rembrandtDir, "GBM_Female_Panda_BLOBFISH_Full.csv"),
                               row.names = 1)
-lggMaleBlobfish <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/LGG_Male_Panda_BLOBFISH_Full.csv"),
+lggMaleBlobfish <- read.csv(paste0(rembrandtDir, "LGG_Male_Panda_BLOBFISH_Full.csv"),
                               row.names = 1)
-gbmMaleBlobfish <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/GBM_Male_Panda_BLOBFISH_Full.csv"),
+gbmMaleBlobfish <- read.csv(paste0(rembrandtDir, "GBM_Male_Panda_BLOBFISH_Full.csv"),
                               row.names = 1)
 
 # Find the GBM Female and Male specific edges.
@@ -88,7 +91,7 @@ geneColorMappingFemale[which(uniqueGenesFemale == "Extracellular Matrix"), "colo
 geneColorMappingFemale[which(uniqueGenesFemale == "Targets of HIF1A"), "color"] <- cancerColor
 geneColorMappingFemale[which(uniqueGenesFemale == "Hypoxia"), "color"] <- hypoxiaColor
 
-gbmFemaleSimplified <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/gbmFemaleSimplifiedBLOBFISH.csv"),
+gbmFemaleSimplified <- read.csv(paste0(rembrandtResultDir, "gbmFemaleSimplifiedBLOBFISH.csv"),
                               row.names = 1)
 gbmFemaleSimplified <- gbmFemaleSimplified[which(gbmFemaleSimplified$gene != "Androgen Receptor"),]
 PlotNetwork(gbmFemaleSimplified, geneColorMapping = geneColorMappingFemale,
@@ -104,7 +107,7 @@ geneColorMappingMale[which(uniqueGenesMale == "Carbohydrate Metabolism"), "color
 geneColorMappingMale[which(uniqueGenesMale == "Extracellular Matrix"), "color"] <- ecmColor
 geneColorMappingMale[which(uniqueGenesMale == "Targets of HIF1A"), "color"] <- cancerColor
 geneColorMappingMale[which(uniqueGenesMale == "Hypoxia"), "color"] <- hypoxiaColor
-gbmMaleSimplified <- read.csv(paste0(sourceDir, "REMBRANDT/Blobfish/gbmMaleSimplifiedBLOBFISH.csv"),
+gbmMaleSimplified <- read.csv(paste0(rembrandtResultDir, "gbmMaleSimplifiedBLOBFISH.csv"),
                                 row.names = 1)
 PlotNetwork(gbmMaleSimplified, geneColorMapping = geneColorMappingMale,
             layoutBipartite = TRUE, nodeSize = 6, tfColor = "gray",

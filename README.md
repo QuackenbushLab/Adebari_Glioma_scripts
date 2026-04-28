@@ -1,5 +1,6 @@
 # Replicating Adebari et al Paper Results
 
+## TCGA
 1.  Download the [PPI file](https://granddb.s3.amazonaws.com/tissues/ppi/tissues_ppi.txt) from GRAND.
 2.  Register for a WebMeV account and download the GBM and LGG data from WebMeV.
 3.  Download the curated gene set GMT file from Human [MSigDB](https://www.gsea-msigdb.org/gsea/msigdb/collections.jsp).
@@ -30,3 +31,23 @@
      -  **sourceDir:** The local directory where the files are stored.
 14.  Run **RunBLOBFISHAllTFS.R** to run BLOBFISH and plot the results, changing the following:
      -  **sourceDir:** The local directory where the files are stored.
+
+## CGGA
+1.   Download the [clinical](https://www.cgga.org.cn/download?file=download/20200506/CGGA.mRNAseq_693.RSEM-genes.20200506.txt.zip&type=mRNAseq_693&time=20200506) and [raw read count](https://www.cgga.org.cn/download?file=download/20220620/CGGA.mRNAseq_693.Read_Counts-genes.20220620.txt.zip&type=mRNAseq_693_counts&time=20220620) data from the Chinese Glioma Genome Atlas and unzip them.
+2.   Run **preprocessCGGA.r** to normalize the data, separate samples into male and female GBM and LGG, and limit to protein coding genes, changing the following:
+    -  **cggaDir:** The path to the CGGA gene expression and clinical data.
+    -  **pccFile:** The path to the file containing gene annotations, to obtain protein coding genes
+3.   Either run **convertPriorTargets.R** to convert the motif targets from Ensembl ID to gene symbol, changing the following, or obtain the files "Symbol_MotifPriorGencode_p5_female_PARonX.txt" and "Symbol_MotifPriorGenocode_p5.txt" from the **motifs** directory in the code base:
+    - **motifDir:** The path to the directory containing the motif priors.
+4. Move the PPI and modified motif data to **cggaDir**.
+5. Run **runpanda_cgga.py** to run PANDA on the CGGA data, changing the following:
+    - **cggaDir:** The path to the directory where the CGGA data, PPI, and modified motifs are stored.
+
+## REMBRANDT (GSE108474)
+1. Download the [clinical](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE108474&format=file&file=GSE108474%5FREMBRANDT%5Fclinical%2Edata%2Etxt%2Egz) and [gene expression](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE108474&format=file&file=GSE108474%5FREMBRANDT%5FGeneExpression%2Etxt%2Egz) data from GEO and unzip them.
+2.   Run **preprocessREMBRANDT.r** to normalize the data, separate samples into male and female GBM and LGG, and limit to protein coding genes, changing the following:
+    -  **sourceDir:** The path to the REMBRANDT gene expression and clinical data.
+    -  **pccFile:** The path to the file containing gene annotations, to obtain protein coding genes
+3. Run **runPANDA_REMBRANDT.R** to run PANDA on each subgroup, modifying the following:
+    -  **fileDir:** The path to the files REMBRANDT expression files from step 2.
+

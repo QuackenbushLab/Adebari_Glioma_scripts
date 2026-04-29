@@ -38,7 +38,12 @@
     -  **sourceDir:** The path to the REMBRANDT gene expression and clinical data.
     -  **pccFile:** The path to the file containing gene annotations, to obtain protein coding genes
 3. Run **runPANDA_REMBRANDT.R** to run PANDA on each subgroup, modifying the following:
-    -  **fileDir:** The path to the files REMBRANDT expression files from step 24. Run BLOBFISH on REMBRANDT data.
+    -  **fileDir:** The path to the REMBRANDT expression files from step 2
+4. Run BLOBFISH on REMBRANDT data using **blobfishforrevdata.r**, changing the following:
+    -  **sourceDir:** The path to the REMBRANDT PANDA files.
+    -  **monsterDir:** The path to the MONSTER files from TCGA.
+    -  **pathwayFile:** The path to the gene-pathway mapping (GMT format).
+    -  **nullDir:** The path to the null PANDA files. 
 5. Run **plotBLOBFISH_REMBRANDT_noAR.R** to plot the BLOBFISH results, changing the following:
     -  **pathwayDir:** The path to the TCGA pathway results.
     -  **rembrandtResultDir:** The path to the REMBRANDT BLOBFISH results.
